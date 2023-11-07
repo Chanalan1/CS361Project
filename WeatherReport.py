@@ -17,7 +17,16 @@ class Weather:
         clear_terminal()
         print("-------------------- Weather APP Generator --------------------")
         print("   ----------------- Generate your report  -----------------")
-        # ... [rest of the intro text]
+        print()
+        print("Below you may generate your customized weather report or you may ")
+        print("use our 'quick' generator that will ask you for a city and return the temp and humidity for that city")
+        print()
+        print("The following customizations are available: ")
+        print("---------------------------------------------------------------------------------------------------")
+        print("Wind Speed: wind_speed, Wind Degree: wind_degree, Wind Direction: wind_dir")
+        print("Pressure: pressure, Precipitation: precipitation, Humidity: humidity")
+        print("Cloud Cover: cloudcover, UV Index: uv_index, Visibility: visibility")
+        print("---------------------------------------------------------------------------------------------------")
 
         checker = True
 
