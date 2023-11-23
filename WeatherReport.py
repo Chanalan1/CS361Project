@@ -1,5 +1,8 @@
 import os
 import requests
+import zmq
+import json
+
 
 def clear_terminal():
     if os.name == 'nt':
@@ -11,9 +14,25 @@ class Weather:
 
     API_KEY = 'b20047520e8450be222eb7a159004e53'
     BASE_URL = 'http://api.weatherstack.com/current'  # Base URL for current weather
+
+
+    def __init__(self):
+        self.context = zmq.Context()
+        self.socket = self.context.socket(zmq.PAIR)
+        self.socket.connect("tcp://localhost:5556")
+
+    def send_request(self, function, parameters):
+        # Send the function request
+        self.socket.send_json(json.dumps({'function': function}))
+        # Send the parameters as a separate message
+        self.socket.send_json(parameters)  # No need to dump, as it's already a JSON string
+        # Receive the response
+        return self.socket.recv_json()
+
     
     @staticmethod
     def report():
+        weather = Weather()
         clear_terminal()
         print("-------------------- Weather APP Generator --------------------")
         print("   ----------------- Generate your report  -----------------")
@@ -35,7 +54,21 @@ class Weather:
             answer = input("Press 1 if you want to generate a quick report, press 2 if you want to make a customized report, press 3 to exit: ")
 
             if answer == "1":
-                print("Micro Service still being worked on")
+                city = input("What city would you like to generate a forecast for?: ")
+                parameters = json.dumps({'cityName': city})
+                forecast_data = weather.send_request('forecast', parameters)
+        
+                print(f"Forecast Report for {city}:")
+                for entry in forecast_data.get('list', []):
+            # Extracting the date and time
+                    date_time = entry.get('dt_txt')
+            # Extracting the main weather parameters
+                    temp = entry.get('main', {}).get('temp')
+            # Extracting the weather condition
+            # Note: 'weather' is a list, so we need to access its first element
+                    condition = entry.get('weather', [{}])[0].get('description')
+                    print(f"Date: {date_time}, Temperature: {temp}°F, Conditions: {condition}")
+
 
             elif answer == "2":
                 while True:  # This loop will keep running until the user confirms or chooses to exit
