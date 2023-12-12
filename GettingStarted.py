@@ -1,14 +1,29 @@
+"""
+Started.py
+
+This module contains the Started class, which provides guidance for getting started with the Weather APP Generator. It includes instructions for navigating through the application's main menu.
+"""
+
+
 import os
 
 def clear_terminal():
+    """
+    Clears the terminal
+    """
     if os.name == 'nt':
         _ = os.system('cls')
     else:
         _ = os.system('clear')
 
 class Started:
-
+    """
+    Class that provides how to get started with the class
+    """
     def rules():
+        """
+        Provides instructions on  how to navigate the app and reassures the user of any complications 
+        """
 
         clear_terminal()
         print("-------------------- Weather APP Generator --------------------")

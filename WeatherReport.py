@@ -1,3 +1,11 @@
+"""
+WeatherReport.py
+
+This file contains all the methods and classes needed to generate both a quick weather report and a more detailed report
+that leverages the 2 API's Weatherstack and Weatherapi.
+"""
+
+
 import os
 import requests
 import zmq
@@ -5,12 +13,23 @@ import json
 
 
 def clear_terminal():
+    """
+    Clears out the terminal after a task has been finished
+    """
     if os.name == 'nt':
         _ = os.system('cls')
     else:
         _ = os.system('clear')
 
 class Weather:
+
+    """
+    Weather class that contains the methods needed to generate a quick report and detailed report.
+    
+    For the quick report, it uses zmq to send a request to the microservice, wait for a response and use the response for the report.
+
+    For the detailed report, it uses the API and ask the user for input parameters to generate their own detailed report.
+    """
 
     API_KEY = 'b20047520e8450be222eb7a159004e53'
     BASE_URL = 'http://api.weatherstack.com/current'  # Base URL for current weather
@@ -32,6 +51,10 @@ class Weather:
     
     @staticmethod
     def report():
+        """
+        The prompt screeen that explains the steps needed to generate the report as well as input suggestions
+        
+        """
         weather = Weather()
         clear_terminal()
         print("-------------------- Weather APP Generator --------------------")
@@ -65,7 +88,6 @@ class Weather:
             # Extracting the main weather parameters
                     temp = entry.get('main', {}).get('temp')
             # Extracting the weather condition
-            # Note: 'weather' is a list, so we need to access its first element
                     condition = entry.get('weather', [{}])[0].get('description')
                     print(f"Date: {date_time}, Temperature: {temp}°F, Conditions: {condition}")
 
